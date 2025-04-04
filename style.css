@@ -3,6 +3,25 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+h1 {
+    text-align:center;
+    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, red);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+h3 {
+    text-align:center;
+}
+
+.pokecartas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+  }
+
 .carta {
     max-width: 200px;
     padding: 16px;
@@ -29,9 +48,24 @@
 }
 
 .bg-shiny {
-    background-color: goldenrod;
-    box-shadow: gold;
+    background: linear-gradient(45deg, goldenrod, #ffd700, goldenrod);
+    background-size: 200% 200%;
+    animation: shimmer 3s ease-in-out infinite;
+    box-shadow: 0 0 12px 4px rgba(255, 215, 0, 0.7);
 }
+  
+@keyframes shimmer {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+}
+  
 
 .img-container {
     width: 100%;
@@ -54,4 +88,9 @@
     font-size: 12px;
     font-weight: 500;
     padding: 4px 8px;
+}
+
+.habilidades {
+    font-weight: bold;
+    justify-content: left;
 }
