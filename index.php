@@ -1,6 +1,5 @@
 <?php
 
-
 function getPokemonData($randomId)
 {
     // 1) genera número aleatorio
@@ -15,14 +14,20 @@ function getPokemonData($randomId)
     // 4) Determina aleatoriamente si es shiny (1 en 20 posibilidades)
     $isShiny = (rand(1, 20) === 1);
 
-     // 5) Selecciona la imagen según si es shiny o no
+    // 5) Extrae las habilidades del Pokémon
+    $habilidades = [];
+    foreach ($pokemonData['abilities'] as $value) {
+        array_push($habilidades, $value['ability']['name']);
+    }
+
+     // 6) Selecciona la imagen según si es shiny o no
     if ($isShiny) {
         $imagen = $pokemonData['sprites']['front_shiny'];
     } else {
         $imagen = $pokemonData['sprites']['front_default'];
     }
 
-    // 6) Creo un objeto pokemon (me quedo sólo con los datos que necesito):
+    // 7) Creo un objeto pokemon (me quedo sólo con los datos que necesito):
     // nombre (name)
     // imagen (sprites[front_default])
     // tipos (types[]-> dentro de cada elemento [type][name])
@@ -35,9 +40,9 @@ function getPokemonData($randomId)
         "nombre" => ucfirst($pokemonData['name']),
         "imagen" => $imagen,
         "tipos"  => $tipos,
+        "habilidades" => $habilidades,
         "shiny"  => $isShiny
     ];
-
     return $pokemon;
 }
 
@@ -67,7 +72,7 @@ function renderCards($pokeArray)
             echo '<img src="' . $pokeArray["imagen"] . '" alt="' . $pokeArray["nombre"] . '">';
         echo '</div>';
         echo '<div class="datos">';
-            echo '<h3>' . $pokeArray["nombre"] . ($pokeArray["shiny"] ? ' (Shiny)' : '') . '</h3>';
+            echo '<h3>' . $pokeArray["nombre"] . '</h3>';
             echo '<div class="tipos-pokemon">';
                 // Recorre cada tipo y crea un span con estilo para el texto
                 foreach ($pokeArray["tipos"] as $tipo) {
@@ -92,13 +97,17 @@ function renderCards($pokeArray)
                     echo '<span style="' . $estilo . '">' . $tipo . '</span>';
                 }
             echo '</div>';
-            // Espacio para habilidades u otros datos
+
+            // Muestra las habilidades en una lista
             echo '<ul class="habilidades">';
+                foreach ($pokeArray["habilidades"] as $habilidad) {
+                    echo '<li>' . $habilidad . '</li>';
+                }
+
             echo '</ul>';
         echo '</div>';
     echo '</div>';
 }
-
 
 ?>
 
@@ -114,9 +123,9 @@ function renderCards($pokeArray)
 
 <body>
     <h1>PokeCartas</h1>
+    <section class="pokecartas">
 
-    <section id="pokecartas">
-        <div class="carta">
+        <!-- <div class="carta">
             <div class="img-container">
                 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png" alt="pikachu">
             </div>
@@ -131,23 +140,22 @@ function renderCards($pokeArray)
                     <li>chispitas</li>
                 </ul>
             </div>
-        </div>
+        </div> -->
+
+        <?php 
+        for ($i = 0; $i <= 3; $i++) {
+            // 1) genera número aleatorio
+            $randomId = rand(1, 151);
+        
+            // 2) Se lo pasamos a la función Para sacar los datos de los Pokemons
+            $pokemon = getPokemonData($randomId);
+
+            // 3) Renderizamos los Pokemon
+            renderCards($pokemon);
+        }
+        ?>
 
     </section>
-    <?php 
-    
-    for ($i = 0; $i < 3; $i++) {
-        // 1) genera número aleatorio
-        $randomId = rand(1, 151);
-        
-        // 2) Se lo pasamos a la función Para sacar los datos de los Pokemons
-        $pokemon = getPokemonData($randomId);
-
-        // 3) Renderizamos los Pokemon
-        renderCards($pokemon);
-    }
-    ?>
-
 </body>
 
 </html>
